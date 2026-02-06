@@ -33,19 +33,26 @@ return new class extends Migration
             $table->unique(['formulario_id', 'parametro_formulario_id']);
         });
 
-        Schema::create('cargos', function (Blueprint $table) {
+        Schema::create('cargo', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('id_nivel_jerarquico')->nullable();
+            $table->unsignedBigInteger('id_grado')->nullable();
+            $table->unsignedBigInteger('id_nivel_instruccion')->nullable();
             $table->string('nombre');
             $table->string('codigo')->unique();
-            $table->string('departamento')->nullable();
-            $table->boolean('activo')->default(true);
+            $table->boolean('state')->default(true);
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index('id_nivel_jerarquico');
+            $table->index('id_grado');
+            $table->index('id_nivel_instruccion');
         });
 
         Schema::create('formulario_cargo', function (Blueprint $table) {
             $table->id();
             $table->foreignId('formulario_id')->constrained()->onDelete('cascade');
-            $table->foreignId('cargo_id')->constrained()->onDelete('cascade');
+            $table->foreignId('cargo_id')->constrained('cargo')->onDelete('cascade');
             $table->timestamps();
             $table->unique(['formulario_id', 'cargo_id']);
         });
@@ -56,6 +63,6 @@ return new class extends Migration
         Schema::dropIfExists('formulario_cargo');
         Schema::dropIfExists('formulario_parametro');
         Schema::dropIfExists('formularios');
-        Schema::dropIfExists('cargos');
+        Schema::dropIfExists('cargo');
     }
 };

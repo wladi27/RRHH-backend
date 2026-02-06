@@ -21,17 +21,14 @@ return new class extends Migration
             if (!Schema::hasColumn('parametro_formularios', 'placeholder')) {
                 $table->string('placeholder')->nullable()->after('texto_ayuda');
             }
-            if (!Schema::hasColumn('parametro_formularios', 'help_text')) {
-                $table->text('help_text')->nullable()->after('configuracion_adicional');
-            }
             if (!Schema::hasColumn('parametro_formularios', 'required')) {
                 $table->boolean('required')->default(false)->after('requerido');
             }
             if (!Schema::hasColumn('parametro_formularios', 'options_source')) {
-                $table->json('options_source')->nullable()->after('fuente_opciones');
+                $table->string('options_source')->nullable()->after('fuente_opciones');
             }
-            if (!Schema::hasColumn('parametro_formularios', 'validation')) {
-                $table->json('validation')->nullable()->after('expresion_regular');
+            if (!Schema::hasColumn('parametro_formularios', 'validation_regex')) {
+                $table->string('validation_regex')->nullable()->after('expresion_regular');
             }
             if (!Schema::hasColumn('parametro_formularios', 'order')) {
                 $table->integer('order')->nullable()->after('orden_defecto');
@@ -39,16 +36,13 @@ return new class extends Migration
             if (!Schema::hasColumn('parametro_formularios', 'visibility_rule')) {
                 $table->json('visibility_rule')->nullable()->after('regla_visibilidad');
             }
-            if (!Schema::hasColumn('parametro_formularios', 'default_value')) {
-                $table->text('default_value')->nullable()->after('configuracion_adicional');
-            }
         });
     }
 
     public function down(): void
     {
         Schema::table('parametro_formularios', function (Blueprint $table) {
-            $cols = ['name','label','data_type','placeholder','help_text','required','options_source','validation','order','visibility_rule','default_value'];
+            $cols = ['name','label','data_type','placeholder','required','options_source','validation_regex','order','visibility_rule'];
             foreach ($cols as $c) {
                 if (Schema::hasColumn('parametro_formularios', $c)) {
                     $table->dropColumn($c);

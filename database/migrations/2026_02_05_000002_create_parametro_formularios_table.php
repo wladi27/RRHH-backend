@@ -11,72 +11,66 @@ return new class extends Migration
     {
         Schema::create('parametro_formularios', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre')->unique()->comment('Clave técnica para JSON');
-            $table->string('etiqueta')->comment('Texto visible para el usuario');
-            $table->enum('tipo_dato', [
-                'numero', 
-                'texto', 
-                'texto_largo', 
-                'seleccion', 
-                'seleccion_multiple', 
-                'fecha', 
-                'fecha_hora', 
-                'archivo', 
-                'casilla',
+            $table->string('name')->unique()->comment('Clave técnica para JSON');
+            $table->string('label')->comment('Texto visible para el usuario');
+            $table->enum('data_type', [
+                'number',
+                'text',
+                'textarea',
+                'select',
+                'select_multiple',
+                'date',
+                'datetime',
+                'file',
+                'checkbox',
                 'radio',
                 'email',
-                'telefono',
+                'tel',
                 'url'
-            ])->default('texto');
-            $table->string('texto_ayuda')->nullable()->comment('Placeholder');
-            $table->boolean('requerido')->default(false);
-            $table->string('fuente_opciones')->nullable()->comment('Endpoint API o lista estática');
-            $table->text('expresion_regular')->nullable();
-            $table->text('mensaje_validacion')->nullable();
-            $table->integer('orden_defecto')->default(0);
-            $table->json('regla_visibilidad')->nullable();
-            $table->json('configuracion_adicional')->nullable();
+            ])->default('text');
+            $table->string('placeholder')->nullable()->comment('Texto de ayuda');
+            $table->boolean('required')->default(false);
+            $table->string('options_source')->nullable()->comment('Endpoint API o lista estática');
+            $table->string('validation_regex')->nullable();
+            $table->integer('order')->default(0);
+            $table->json('visibility_rule')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
 
         DB::table('parametro_formularios')->insert([
             [
-                'nombre' => 'anios_experiencia',
-                'etiqueta' => 'Años de Experiencia',
-                'tipo_dato' => 'numero',
-                'texto_ayuda' => 'Ej: 5',
-                'requerido' => true,
-                'fuente_opciones' => null,
-                'expresion_regular' => '^[0-9]+$',
-                'mensaje_validacion' => null,
-                'orden_defecto' => 10,
+                'name' => 'anios_experiencia',
+                'label' => 'Años de Experiencia',
+                'data_type' => 'number',
+                'placeholder' => 'Ej: 5',
+                'required' => true,
+                'options_source' => null,
+                'validation_regex' => '^[0-9]+$',
+                'order' => 10,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
             [
-                'nombre' => 'nombre_completo',
-                'etiqueta' => 'Nombre Completo',
-                'tipo_dato' => 'texto',
-                'texto_ayuda' => null,
-                'requerido' => true,
-                'fuente_opciones' => null,
-                'expresion_regular' => null,
-                'mensaje_validacion' => null,
-                'orden_defecto' => 1,
+                'name' => 'nombre_completo',
+                'label' => 'Nombre Completo',
+                'data_type' => 'text',
+                'placeholder' => null,
+                'required' => true,
+                'options_source' => null,
+                'validation_regex' => null,
+                'order' => 1,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
             [
-                'nombre' => 'correo_electronico',
-                'etiqueta' => 'Correo Electrónico',
-                'tipo_dato' => 'email',
-                'texto_ayuda' => 'ejemplo@empresa.com',
-                'requerido' => true,
-                'fuente_opciones' => null,
-                'expresion_regular' => '^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$',
-                'mensaje_validacion' => null,
-                'orden_defecto' => 2,
+                'name' => 'correo_electronico',
+                'label' => 'Correo Electrónico',
+                'data_type' => 'email',
+                'placeholder' => 'ejemplo@empresa.com',
+                'required' => true,
+                'options_source' => null,
+                'validation_regex' => '^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$',
+                'order' => 2,
                 'created_at' => now(),
                 'updated_at' => now()
             ]
