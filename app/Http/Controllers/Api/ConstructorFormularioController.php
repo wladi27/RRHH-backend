@@ -223,20 +223,20 @@ class ConstructorFormularioController extends Controller
 
         foreach ($parametros as $parametro) {
             $campo = [
-                'nombre' => $parametro->nombre,
-                'etiqueta' => $parametro->etiqueta,
-                'tipo' => $parametro->tipo_dato,
-                'texto_ayuda' => $parametro->texto_ayuda,
+                'nombre' => $parametro->name,
+                'etiqueta' => $parametro->label,
+                'tipo' => $parametro->data_type,
+                'texto_ayuda' => $parametro->placeholder,
                 'requerido' => (bool) $parametro->pivot->requerido,
                 'validacion' => [
-                    'expresion_regular' => $parametro->expresion_regular,
-                    'mensaje' => $parametro->mensaje_validacion
+                    'expresion_regular' => $parametro->validation_regex,
+                    'mensaje' => null
                 ],
                 'orden' => $parametro->pivot->orden
             ];
 
-            if (in_array($parametro->tipo_dato, ['seleccion', 'seleccion_multiple', 'radio'])) {
-                $campo['fuente_opciones'] = $parametro->fuente_opciones;
+            if (in_array($parametro->data_type, ['select', 'select_multiple', 'radio'])) {
+                $campo['fuente_opciones'] = $parametro->options_source;
             }
 
             if ($parametro->pivot->configuracion_personalizada) {
@@ -244,8 +244,8 @@ class ConstructorFormularioController extends Controller
                 $campo = array_merge($campo, $configPersonalizada);
             }
 
-            if ($parametro->regla_visibilidad) {
-                $campo['regla_visibilidad'] = $parametro->regla_visibilidad;
+            if ($parametro->visibility_rule) {
+                $campo['regla_visibilidad'] = $parametro->visibility_rule;
             }
 
             $estructura['campos'][] = $campo;
@@ -273,7 +273,7 @@ class ConstructorFormularioController extends Controller
             'parametros.*.options_source' => 'nullable',
             'parametros.*.visibility_rule' => 'nullable|array',
             'cargos' => 'nullable|array',
-            'cargos.*' => 'exists:cargos,id'
+            'cargos.*' => 'exists:cargo,id'
         ]);
     }
 
